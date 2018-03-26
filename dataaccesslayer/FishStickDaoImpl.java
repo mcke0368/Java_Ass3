@@ -24,17 +24,17 @@ import datatransfer.FishStick;
  * @author abc xyz
  */
 public enum FishStickDaoImpl implements FishStickDao{
-	
+
 	/** Only use one constant for Singleton Design Pattern */
 	INSTANCE;
 
 	private SessionFactory factory;
 	private StandardServiceRegistry registry;
-	
+
 	private FishStickDaoImpl(){
 		try {
 			// A SessionFactory is set up once for an application!
-			
+
 			/**
 			 * TODO: Review this code below
 			 */
@@ -55,27 +55,80 @@ public enum FishStickDaoImpl implements FishStickDao{
 	@Override
 	public void insertFishStick(FishStick fishStick){
 		// code here to use Hibernate to insert a record.
-		
+
 		if(factory == null){
 			return; // Should return a message if null
 		}
-		Datasource
-		throw new RuntimeException("Method not impemented"); // remove this
-		
+		/*
+		 * Don't need datasource or connection as this is with 
+		 * Hibernate
+		 */
+
+		FishStick fs = new FishStick();
+
+		Session s = null;
+		Transaction tx = null;
+		try{
+			s = factory.openSession(); // Open the session to the DB
+			tx = s.beginTransaction(); // Begin the transaction for the DB
+			s.save(fishStick); // Save the fishStick to the DB
+			tx.commit(); // Commit the transaction
+
+		} catch(Exception e){
+			if (tx!=null) tx.rollback();
+			throw e;
+		}finally{
+			s.close();
+		}
+
 	}
 
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public FishStick findByUUID(String uuid){
 		// Code here to use Hibernate to look up a record based on UUID
-		throw new RuntimeException("Method not impemented"); // remove this
-		
+
+		List<FishStick> fsList;
+		Session s = null;
+		Transaction tx = null;
+		try{
+			s = factory.openSession(); // Open the session to the DB
+			tx = s.beginTransaction(); // Begin the transaction for the DB
+			
+			fsList = s.createQuery("from fishstick where uuid = :uuid").setParameter("uuid",uuid).list();
+			
+			//s.save(fishStick); // Save the fishStick to the DB
+			//tx.commit(); // Commit the transaction
+
+		} catch(Exception e){
+			if (tx!=null) tx.rollback();
+			throw e;
+		}finally{
+			s.close();
+		}
+			return fsList.get(0);
 	}
 
 	@Override
 	public void shutdown() {
 		// code here to close the factory, and to destroy the registry
+		try{
+			if(factory != null && factory.isClosed() == false){
+				factory.close();
+			}
+		} catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		try{
+			if(registry != null){
+				StandardServiceRegistryBuilder.destroy(registry);
+			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		
 		throw new RuntimeException("Method not impemented"); // remove this
 	}
 }
