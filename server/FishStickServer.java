@@ -18,41 +18,39 @@ import java.util.Scanner;
  */
 
 public class FishStickServer {
-	public static void main(String[] args) {
-		try {
-			int portNum = 1099;
-			if(args.length > 0){
-				portNum = Integer.parseInt(args[0]);
-			}
-			
-			// ToDo: Create the remote service
-			FishStickServiceImpl fishStickServiceImpl = null; // replace null
-			// ToDo: create RMI registry, saving reference to it
-			// message to users (this is done already on, next line)
-			System.out.println( "Registry created" );
-			
-			// ToDo: export the remote service
-			// ToDo: rebind using portNum with service name /FishStickService
-			// message to users (this is done already on next line)
-			System.out.println( "Exported" );
-			
-			
-			System.out.println("Press any key to shutdown remote object and end program");
-			Scanner input = new Scanner(System.in);
-			input.nextLine(); // pause, let server-side admin close down connections
-			
-			fishStickServiceImpl.shutDownDao(); // close down Hibernate resources
-			
-			System.out.println("un-exporting remote object");
-			UnicastRemoteObject.unexportObject(fishStickServiceImpl, true); // remove remote object
-			
-			//next lines not needed in this case, port 1099 is free on JVM exit according to TCPView
-			//see: https://docs.microsoft.com/en-us/sysinternals/downloads/tcpview
-			//System.out.println("Shutting down registry"); 
-			//UnicastRemoteObject.unexportObject(registry, true);
-		} catch (Exception e) {
-			System.out.println("Trouble: " + e);
-			e.printStackTrace();
-		}
-	}
+    public static void main(String[] args) {
+        FishStickServiceImpl fs = null;
+        int portNum = 1099;
+        if(args.length > 0){
+                portNum = Integer.parseInt(args[0]);
+        }
+
+        try{
+            fs = new FishStickServiceImpl();
+            Registry registry = LocateRegistry.createRegistry(portNum);
+            System.out.println( "Registry created" );
+            UnicastRemoteObject.exportObject(fs, 0);
+            Naming.rebind("//localhost:" + portNum + "/FishStickService", fs);
+            System.out.println( "Exported" );
+
+            // pause main thread until server admin presses a key.
+            System.out.println("Press any key to shutdown remote object and end program");
+            Scanner input = new Scanner(System.in);
+            input.nextLine(); // pause, let server-side admin close down connections
+        }catch (Exception e){
+            System.out.println("Trouble: " + e);
+            e.printStackTrace();
+        }finally{
+            if(fs != null){
+                fs.shutDownDao(); // close down Hibernate resources
+            }
+        }
+
+        System.out.println("un-exporting remote object");
+        try{
+            UnicastRemoteObject.unexportObject(fs, true); // remove remote object
+        }catch(Exception e){
+            System.out.println("Trouble: " + e);
+        }
+    }
 }
