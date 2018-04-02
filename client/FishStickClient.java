@@ -9,6 +9,8 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.UUID;
 
+import org.hibernate.Session;
+
 import datatransfer.FishStick;
 import remoteinterface.FishStickService;
 
@@ -26,17 +28,6 @@ import java.rmi.NotBoundException;
  */
 public class FishStickClient {
 
-	/** The connection. */
-	private Socket connection;
-
-	/** The output. */
-	private ObjectOutputStream output;
-
-	/** The input. */
-	private ObjectInputStream input;
-
-	/** The message. */
-	private String message = "";
 
 	/** The server name. */
 	private String serverName = "localhost";
@@ -65,7 +56,7 @@ public class FishStickClient {
 			(new FishStickClient("localhost", Integer.parseInt(args[1]))).runClient();
 			break;
 		default:
-			(new FishStickClient("localhost", 8081)).runClient();
+			(new FishStickClient("localhost", 1099)).runClient();
 		}
 
 	}
@@ -87,7 +78,9 @@ public class FishStickClient {
 	 * @author Joel Schmuland and Jordan Mckenzie
 	 */
 	public void runClient() {
-		int port = 8082;
+		
+		
+		int port = 1099;
 		String serverName = new String("localhost");
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -102,13 +95,14 @@ public class FishStickClient {
 
 		// Connect to the server
 		try {
-			connection = new Socket(InetAddress.getByName(serverName), portNum);
-			output = new ObjectOutputStream(connection.getOutputStream());
-			input = new ObjectInputStream(connection.getInputStream());
+//			connection = new Socket(InetAddress.getByName(serverName), portNum);
+//			output = new ObjectOutputStream(connection.getOutputStream());
+//			input = new ObjectInputStream(connection.getInputStream());
 			String message;
 			System.out.println("Attempting to connect to rmi://"+serverName+":"+port+"/EchoService");
 			FishStickService es = (FishStickService) // Changed to FishStickService
 					Naming.lookup("rmi://"+serverName+":"+port+"/FishStickService");
+			
 
 			do {
 				System.out.print("Input> ");
