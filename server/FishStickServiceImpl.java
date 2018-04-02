@@ -27,12 +27,15 @@ public class FishStickServiceImpl implements FishStickService  {
 	@Override
 	public void insert(FishStick fishStick) throws RemoteException {
 		// code to use the FishStickDaoImpl to insert a record
+		FishStickDaoImpl.INSTANCE.insertFishStick(fishStick);
+		
 		throw new RuntimeException("Method not impemented"); // remove this
 	}
 
 	@Override
 	public FishStick findByUUID(String uuid) throws RemoteException {
 		// code to use the FishStickDaoImpl to lookup and return a FishStick
+		FishStickDaoImpl.INSTANCE.findByUUID(uuid);
 		throw new RuntimeException("Method not impemented"); // remove this
 	}
 	

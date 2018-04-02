@@ -15,6 +15,8 @@ import remoteinterface.FishStickService;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.*;
 import java.rmi.NotBoundException;
 
@@ -23,8 +25,11 @@ import java.rmi.NotBoundException;
  * @author abc xyz
  */
 public class FishStickClient {
+	
 
 	public static void main(String[] args) {
+		
+		
 		int port = 8082;
 		String serverName = new String("localhost");
 
@@ -56,15 +61,17 @@ public class FishStickClient {
 			String message;
 			System.out.println("Attempting to connect to rmi://"+serverName+":"+port+"/EchoService");
 			FishStickService es = (FishStickService) // Changed to FishStickService
-					Naming.lookup("rmi://"+serverName+":"+port+"/EchoService");
+					Naming.lookup("rmi://"+serverName+":"+port+"/FishStickService");
 
 			do {
 				System.out.print("Input> ");
 				try {
 					message = br.readLine();
 					if (message != null){
-						System.out.println(es.processMessage(myHostName, message));
+						System.out.println(es.insertFishStick(myHostName, message));
 					}
+					
+					if (message.equals(""))
 				}catch(IOException e){
 					System.out.println(e);
 					message = null;
