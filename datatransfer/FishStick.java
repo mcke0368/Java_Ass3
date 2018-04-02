@@ -22,6 +22,8 @@ import java.io.Serializable;
  * Transfer object for FishStick data
  * @author Stanley Pieda
  */
+@Entity
+@Table(name="FishStick")
 public class FishStick implements Serializable{
 	/** Explicit serialVersionUID to avoid generating one automatically */
 	private static final long serialVersionUID = 1L;
@@ -70,6 +72,8 @@ public class FishStick implements Serializable{
 	}
 	
 	/** Getter for id */
+	@Id
+	@GeneratedValue (strategy = GenerationType.AUTO)
 	public Integer getId() {
 		return id;
 	}
@@ -78,6 +82,7 @@ public class FishStick implements Serializable{
 		this.id = id;
 	}
 	/** Getter for recordNumber */
+	@Column (length = 55)
 	public int getRecordNumber() {
 		return recordNumber;
 	}
@@ -86,6 +91,7 @@ public class FishStick implements Serializable{
 		this.recordNumber = recordNumber;
 	}
 	/** Getter for omega */
+	@Column (length = 55)
 	public String getOmega() {
 		return omega;
 	}
@@ -93,7 +99,10 @@ public class FishStick implements Serializable{
 	public void setOmega(String omega) {
 		this.omega = omega;
 	}
+	
+	
 	/** Getter for lambda */
+	@Column (length = 55)
 	public String getLambda() {
 		return lambda;
 	}
@@ -101,7 +110,10 @@ public class FishStick implements Serializable{
 	public void setLambda(String lambda) {
 		this.lambda = lambda;
 	}
+	
+	
 	/** Getter for uuid */
+	@Column (length = 55)
 	public String getUUID() {
 		return uuid;
 	}
@@ -110,6 +122,7 @@ public class FishStick implements Serializable{
 		this.uuid = uuid;
 	}
 	/** Getter for isLastFishStick, can be used by consumer to detect end of buffer */
+	@Transient
 	public boolean isLastFishStick() {
 		return isLastFishStick;
 	}
