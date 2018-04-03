@@ -22,6 +22,7 @@ import remoteinterface.FishStickService;
  */
 public class FishStickServiceImpl implements FishStickService  {
 	
+	
 	public FishStickServiceImpl() {}
 	
 	@Override

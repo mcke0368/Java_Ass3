@@ -33,7 +33,7 @@ public class FishStickClient {
 	private String serverName = "localhost";
 
 	/** The port num. */
-	private int portNum = 8081;
+	private int portNum = 1099;
 
 	/** The br. */
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -119,7 +119,7 @@ public class FishStickClient {
 						es.insert(fs);
 
 				}catch(IOException e){
-					System.out.println(e);
+					e.printStackTrace();
 					message = null;
 				}
 			} while ( ! (br.readLine() == null || br.readLine().isEmpty()) );

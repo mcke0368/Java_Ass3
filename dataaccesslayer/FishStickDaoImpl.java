@@ -34,11 +34,15 @@ public enum FishStickDaoImpl implements FishStickDao{
 	private FishStickDaoImpl(){
 		try {
 			// A SessionFactory is set up once for an application!
+			//code here to set up the registry 
+			registry =  new StandardServiceRegistryBuilder()
+					.configure() // configures settings from hibernate.cfg.xml
+					.build();
 
-			/**
-			 * TODO: Review this code below
-			 */
-			MetadataImplementor meta = (MetadataImplementor) new MetadataSources(registry).addAnnotatedClass(FishStick.class).buildMetadata();
+			MetadataImplementor meta = 
+					(MetadataImplementor) new MetadataSources( registry )
+					.addAnnotatedClass(FishStick.class)
+					.buildMetadata();
 			factory = meta.buildSessionFactory();
 		}
 		catch (Exception e) {
@@ -95,9 +99,9 @@ public enum FishStickDaoImpl implements FishStickDao{
 		try{
 			s = factory.openSession(); // Open the session to the DB
 			tx = s.beginTransaction(); // Begin the transaction for the DB
-			
+
 			fsList = s.createQuery("from fishstick where uuid = :uuid").setParameter("uuid",uuid).list();
-			
+
 			//s.save(fishStick); // Save the fishStick to the DB
 			//tx.commit(); // Commit the transaction
 
@@ -107,7 +111,7 @@ public enum FishStickDaoImpl implements FishStickDao{
 		}finally{
 			s.close();
 		}
-			return fsList.get(0);
+		return fsList.get(0);
 	}
 
 	@Override
@@ -120,7 +124,7 @@ public enum FishStickDaoImpl implements FishStickDao{
 		} catch(Exception e){
 			System.out.println(e.getMessage());
 		}
-		
+
 		try{
 			if(registry != null){
 				StandardServiceRegistryBuilder.destroy(registry);
@@ -128,7 +132,5 @@ public enum FishStickDaoImpl implements FishStickDao{
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}
-		
-		throw new RuntimeException("Method not impemented"); // remove this
 	}
 }
