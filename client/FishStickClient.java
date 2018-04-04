@@ -78,14 +78,14 @@ public class FishStickClient {
 	 * @author Joel Schmuland and Jordan Mckenzie
 	 */
 	public void runClient() {
-		
-		
+
+
 		int port = 1099;
 		String serverName = new String("localhost");
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String myHostName = "localhost";
-		
+
 		try {
 			InetAddress myHost = Inet4Address.getLocalHost();
 			myHostName = myHost.getHostName();
@@ -93,16 +93,10 @@ public class FishStickClient {
 			System.out.println("Communication link failure");;
 		}
 
-		// Connect to the server
 		try {
-//			connection = new Socket(InetAddress.getByName(serverName), portNum);
-//			output = new ObjectOutputStream(connection.getOutputStream());
-//			input = new ObjectInputStream(connection.getInputStream());
-			String message;
 			System.out.println("Attempting to connect to rmi://"+serverName+":"+port+"/EchoService");
 			FishStickService es = (FishStickService) // Changed to FishStickService
 					Naming.lookup("rmi://"+serverName+":"+port+"/FishStickService");
-			
 
 			do {
 				System.out.print("Input> ");
@@ -114,13 +108,15 @@ public class FishStickClient {
 					fs.setOmega(br.readLine());
 					System.out.print("Please enter lambda: ");
 					fs.setLambda(br.readLine());
-					fs.setUUID(UUID.randomUUID().toString());
-					//message = br.readLine();
-						es.insert(fs);
+					String uuid = UUID.randomUUID().toString();
+					fs.setUUID(uuid);
+					es.insert(fs);
+					FishStick fs = es.findByUUID(uuid);
+					
+					System.out.println("Command completed successfully. Returned FishStick: "+fs.toString());
 
 				}catch(IOException e){
 					e.printStackTrace();
-					message = null;
 				}
 			} while ( ! (br.readLine() == null || br.readLine().isEmpty()) );
 			System.out.println("Client shutting down");

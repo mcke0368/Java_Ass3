@@ -68,7 +68,6 @@ public enum FishStickDaoImpl implements FishStickDao{
 		 * Hibernate
 		 */
 
-		FishStick fs = new FishStick();
 
 		Session s = null;
 		Transaction tx = null;
@@ -100,7 +99,7 @@ public enum FishStickDaoImpl implements FishStickDao{
 			s = factory.openSession(); // Open the session to the DB
 			tx = s.beginTransaction(); // Begin the transaction for the DB
 
-			fsList = s.createQuery("from fishstick where uuid = :uuid").setParameter("uuid",uuid).list();
+			fsList = s.createQuery("from FishStick where uuid = :uuid").setParameter("uuid",uuid).list();
 
 			//s.save(fishStick); // Save the fishStick to the DB
 			//tx.commit(); // Commit the transaction
