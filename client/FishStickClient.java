@@ -9,6 +9,8 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.UUID;
 
+import org.hibernate.Session;
+
 import datatransfer.FishStick;
 import remoteinterface.FishStickService;
 
@@ -25,40 +27,73 @@ import java.rmi.NotBoundException;
  * @author abc xyz
  */
 public class FishStickClient {
-	
 
+
+	/** The server name. */
+	private String serverName = "localhost";
+
+	/** The port num. */
+	private int portNum = 1099;
+
+	/** The br. */
+	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+	/** The fs. */
+	// Added FishStick Object to be transfererred to server via Message object
+	private FishStick fs = new FishStick();
+
+	/**
+	 * The main method.
+	 * @author Joel Schmuland and Jordan Mckenzie
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
-		
-		
-		int port = 8082;
+		switch (args.length) {
+		case 2:
+			(new FishStickClient(args[1], Integer.parseInt(args[2]))).runClient();
+			break;
+		case 1:
+			(new FishStickClient("localhost", Integer.parseInt(args[1]))).runClient();
+			break;
+		default:
+			(new FishStickClient("localhost", 1099)).runClient();
+		}
+
+	}
+
+	/**
+	 * Instantiates a new fish stick client.
+	 * @author Joel Schmuland and Jordan Mckenzie
+	 *
+	 * @param serverName the server name
+	 * @param portNum the port num
+	 */
+	public FishStickClient(String serverName, int portNum) {
+		this.serverName = serverName;
+		this.portNum = portNum;
+	}
+
+	/**
+	 * Run client.
+	 * @author Joel Schmuland and Jordan Mckenzie
+	 */
+	public void runClient() {
+
+
+		int port = 1099;
 		String serverName = new String("localhost");
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String myHostName = "localhost";
 
-		switch (args.length) {
-		case 0:
-			break;
-		case 1: 
-			serverName = args[0];
-			break;
-		case 2:
-			serverName = args[0];
-			port = Integer.parseInt(args[1]);
-			break;
-		default:
-			System.out.println("usage: EchoClient [hostname [portnum]]");
-			break;
-		}
 		try {
 			InetAddress myHost = Inet4Address.getLocalHost();
 			myHostName = myHost.getHostName();
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			System.out.println("Communication link failure");;
 		}
 
 		try {
-			String message;
 			System.out.println("Attempting to connect to rmi://"+serverName+":"+port+"/EchoService");
 			FishStickService es = (FishStickService) // Changed to FishStickService
 					Naming.lookup("rmi://"+serverName+":"+port+"/FishStickService");
@@ -66,17 +101,24 @@ public class FishStickClient {
 			do {
 				System.out.print("Input> ");
 				try {
-					message = br.readLine();
-					if (message != null){
-						System.out.println(es.insertFishStick(myHostName, message));
-					}
+					System.out.print("Enter data for new FishStick:\n");
+					System.out.print("Please enter record number: ");
+					fs.setRecordNumber(Integer.parseInt(br.readLine()));
+					System.out.print("Please enter omega: ");
+					fs.setOmega(br.readLine());
+					System.out.print("Please enter lambda: ");
+					fs.setLambda(br.readLine());
+					String uuid = UUID.randomUUID().toString();
+					fs.setUUID(uuid);
+					es.insert(fs);
+					FishStick fs = es.findByUUID(uuid);
 					
-					if (message.equals(""))
+					System.out.println("Command completed successfully. Returned FishStick: "+fs.toString());
+
 				}catch(IOException e){
-					System.out.println(e);
-					message = null;
+					e.printStackTrace();
 				}
-			} while ( ! (message == null || message.isEmpty()) );
+			} while ( ! (br.readLine() == null || br.readLine().isEmpty()) );
 			System.out.println("Client shutting down");
 		}
 		catch (MalformedURLException e) {
@@ -100,4 +142,17 @@ public class FishStickClient {
 			System.out.println(e);
 		}
 	}
+
+
+	/**
+	 * Generate UUID.
+	 * @author Joel Schmuland and Jordan Mckenzie
+	 *
+	 * @return the uuid
+	 */
+	public UUID generateUUID() {
+		return UUID.randomUUID();
+	}
+
+
 }

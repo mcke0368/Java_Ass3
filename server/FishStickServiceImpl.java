@@ -22,6 +22,7 @@ import remoteinterface.FishStickService;
  */
 public class FishStickServiceImpl implements FishStickService  {
 	
+	
 	public FishStickServiceImpl() {}
 	
 	@Override
@@ -29,14 +30,12 @@ public class FishStickServiceImpl implements FishStickService  {
 		// code to use the FishStickDaoImpl to insert a record
 		FishStickDaoImpl.INSTANCE.insertFishStick(fishStick);
 		
-		throw new RuntimeException("Method not impemented"); // remove this
 	}
 
 	@Override
 	public FishStick findByUUID(String uuid) throws RemoteException {
 		// code to use the FishStickDaoImpl to lookup and return a FishStick
-		FishStickDaoImpl.INSTANCE.findByUUID(uuid);
-		throw new RuntimeException("Method not impemented"); // remove this
+		return FishStickDaoImpl.INSTANCE.findByUUID(uuid);
 	}
 	
 	// Do not place this method into remote interface. i.e. no @Override

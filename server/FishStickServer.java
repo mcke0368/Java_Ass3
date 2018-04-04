@@ -30,13 +30,12 @@ public class FishStickServer {
             Registry registry = LocateRegistry.createRegistry(portNum);
             System.out.println( "Registry created" );
             UnicastRemoteObject.exportObject(fs, 0);
-            Naming.rebind("//localhost:" + portNum + "/FishStickService", fs);
             System.out.println( "Exported" );
+            Naming.rebind("//localhost:" + portNum + "/FishStickService", fs);
 
             // pause main thread until server admin presses a key.
             System.out.println("Press any key to shutdown remote object and end program");
-            Scanner input = new Scanner(System.in);
-            input.nextLine(); // pause, let server-side admin close down connections
+            new java.util.Scanner(System.in).nextLine(); // pause, let server-side admin close down connections
         }catch (Exception e){
             System.out.println("Trouble: " + e);
             e.printStackTrace();
