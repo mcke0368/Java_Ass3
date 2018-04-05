@@ -99,8 +99,9 @@ public class FishStickClient {
 					Naming.lookup("rmi://"+serverName+":"+port+"/FishStickService");
 
 			do {
-				System.out.print("Input> ");
+				System.out.println("Input> ");
 				try {
+					
 					System.out.print("Enter data for new FishStick:\n");
 					System.out.print("Please enter record number: ");
 					fs.setRecordNumber(Integer.parseInt(br.readLine()));
@@ -114,11 +115,12 @@ public class FishStickClient {
 					FishStick fs = es.findByUUID(uuid);
 					
 					System.out.println("Command completed successfully. Returned FishStick: "+fs.toString());
+					System.out.println("Do you want to insert another fish stick?(enter 'y' to insert again):"); // Ask to insert again
 
 				}catch(IOException e){
 					e.printStackTrace();
 				}
-			} while ( ! (br.readLine() == null || br.readLine().isEmpty()) );
+			} while ( (br.readLine().equals("y")) );
 			System.out.println("Client shutting down");
 		}
 		catch (MalformedURLException e) {
