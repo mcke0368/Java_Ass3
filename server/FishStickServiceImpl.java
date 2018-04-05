@@ -31,6 +31,7 @@ public class FishStickServiceImpl implements FishStickService  {
 	public FishStickServiceImpl() {}
 	
 	/**
+	 * insert - Calls the INSTANCE of the FishstickDao to insert the Fishstick into the DB
 	 * @author Joel Schmuland and Jordan Mckenzie
 	 */
 	@Override
@@ -41,6 +42,7 @@ public class FishStickServiceImpl implements FishStickService  {
 	}
 
 	/**
+	 * findByUUID - Calls the INSTANCE of the FishstickDao to find the correct FishStick in the DB by the UUID
 	 * @author Joel Schmuland and Jordan Mckenzie
 	 */
 	@Override
@@ -50,7 +52,7 @@ public class FishStickServiceImpl implements FishStickService  {
 	}
 	
 	/**
-	 * The shutDownDao method calls the shutdown method of the FishstickDaoImpl
+	 * shutDownDao - Calls the INSTANCE of the FishstickDao to shutdown the service
 	 * @author Joel Schmuland and Jordan Mckenzie
 	 */
 	public void shutDownDao() {

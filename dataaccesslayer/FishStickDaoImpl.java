@@ -99,42 +99,40 @@ public enum FishStickDaoImpl implements FishStickDao{
 
 
 	/**
+	 * findByUUID Finds the data for the associated FishStick by the UUID
 	 * @author Joel Schmuland and Jordan Mckenzie
+	 * @return Fishstick - the FishStick object that was found via the UUID
+	 * @param uuid - String of UUID that identifies the Fishstick object that is to be located in the Database
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public FishStick findByUUID(String uuid){
-		// Code here to use Hibernate to look up a record based on UUID
-
-		List<FishStick> fsList;
+		
+		List<FishStick> fsList; // To Hold the Fishstick Object(s)
+		
+		// Open the Session to get the Fishstick Object from the DB
 		Session s = null;
-		Transaction tx = null;
 		try{
 			s = factory.openSession(); // Open the session to the DB
-			tx = s.beginTransaction(); // Begin the transaction for the DB
 
-			fsList = s.createQuery("from FishStick where uuid = :uuid").setParameter("uuid",uuid).list();
-
-			//s.save(fishStick); // Save the fishStick to the DB
-			//tx.commit(); // Commit the transaction
+			fsList = s.createQuery("from FishStick where uuid = :uuid").setParameter("uuid",uuid).list(); //Query to find the FishStick by UUID
 
 		} catch(Exception e){
-			if (tx!=null) tx.rollback();
 			throw e;
 		}finally{
-			s.close();
+			s.close(); // Close the session when completed
 		}
-		return fsList.get(0);
+		return fsList.get(0); // Return the Fishstick that was located via the UUID
 	}
 
 	/**
+	 * shutdown Closes the factory and destroys the registry after the application has completed
 	 * @author Joel Schmuland and Jordan Mckenzie
 	 */
 	@Override
 	public void shutdown() {
-		// code here to close the factory, and to destroy the registry
 		try{
-			if(factory != null && factory.isClosed() == false){
+			if(factory != null && factory.isClosed() == false){ // Check if the factory is closed. If not, close it
 				factory.close();
 			}
 		} catch(Exception e){
@@ -142,7 +140,7 @@ public enum FishStickDaoImpl implements FishStickDao{
 		}
 
 		try{
-			if(registry != null){
+			if(registry != null){ // Check if the registry is destroyed, if not destroy it
 				StandardServiceRegistryBuilder.destroy(registry);
 			}
 		}catch(Exception e){
