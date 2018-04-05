@@ -29,17 +29,11 @@ import java.rmi.NotBoundException;
 public class FishStickClient {
 
 
-	/** The server name. */
-	private String serverName = "localhost";
-
-	/** The port num. */
-	private int portNum = 1099;
-
 	/** The br. */
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 	/** The fs. */
-	// Added FishStick Object to be transfererred to server via Message object
+	// Added FishStick Object to be transfererred to server
 	private FishStick fs = new FishStick();
 
 	/**
@@ -48,30 +42,10 @@ public class FishStickClient {
 	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
-		switch (args.length) {
-		case 2:
-			(new FishStickClient(args[1], Integer.parseInt(args[2]))).runClient();
-			break;
-		case 1:
-			(new FishStickClient("localhost", Integer.parseInt(args[1]))).runClient();
-			break;
-		default:
-			(new FishStickClient("localhost", 1099)).runClient();
-		}
-
+		new FishStickClient().runClient();
 	}
-
-	/**
-	 * Instantiates a new fish stick client.
-	 * @author Joel Schmuland and Jordan Mckenzie
-	 *
-	 * @param serverName the server name
-	 * @param portNum the port num
-	 */
-	public FishStickClient(String serverName, int portNum) {
-		this.serverName = serverName;
-		this.portNum = portNum;
-	}
+	
+	public void FishstickClient(){	}
 
 	/**
 	 * Run client.
