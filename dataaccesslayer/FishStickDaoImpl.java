@@ -1,6 +1,8 @@
 /* File: FishStickDaoImpl.java
  * Author: Stanley Pieda
  * Date: Jan 2018
+ * Modified By: Jordan Mckenzie & Joel Schmuland
+ * Modifed On: April 2018
  * References:
  * Ram N. (2013). Data Access Object Design Pattern or DAO Pattern [blog] Retrieved from
  * http://ramj2ee.blogspot.in/2013/08/data-access-object-design-pattern-or.html
@@ -19,29 +21,37 @@ import org.jboss.logging.Message;
 
 import datatransfer.FishStick;
 
+
 /**
- * Ensure that all classes and class members have Javadoc comments with your name
- * @author abc xyz
+ * The Enum FishStickDaoImpl.
+ * @author Jordan Mckenzie & Joel Schmuland
  */
 public enum FishStickDaoImpl implements FishStickDao{
 
-	/** Only use one constant for Singleton Design Pattern */
+	/**  Only use one constant for Singleton Design Pattern. */
 	INSTANCE;
 
+	/** The SessionFactory for the application. */
 	private SessionFactory factory;
+	
+	/** The registry for the application. */
 	private StandardServiceRegistry registry;
 
+	/**
+	 * Private constructor that when called via the INSTANCE of the enum,  the 
+	 * session and registry are set up for the application
+	 * @author Jordan Mckenzie & Joel Schmuland
+	 */
 	private FishStickDaoImpl(){
 		try {
 			// A SessionFactory is set up once for an application!
-			//code here to set up the registry 
 			registry =  new StandardServiceRegistryBuilder()
 					.configure() // configures settings from hibernate.cfg.xml
 					.build();
 
 			MetadataImplementor meta = 
 					(MetadataImplementor) new MetadataSources( registry )
-					.addAnnotatedClass(FishStick.class)
+					.addAnnotatedClass(FishStick.class) // Identifies the class that is correctly annotated and will be used
 					.buildMetadata();
 			factory = meta.buildSessionFactory();
 		}
@@ -56,19 +66,20 @@ public enum FishStickDaoImpl implements FishStickDao{
 		}
 	}
 
+	/**
+	 * insertFishStick uses the Hibernate session to insert a FishStick object into the DB
+	 * @author Jordan Mckenzie & Joel Schmuland
+	 * @param fishstick - The fishstick object to be inserted into the DB via the Hibernate session
+	 */
 	@Override
 	public void insertFishStick(FishStick fishStick){
-		// code here to use Hibernate to insert a record.
 
 		if(factory == null){
-			return; // Should return a message if null
+			System.out.println("Session not Set!"); //Message displayed if null
+			return;
 		}
-		/*
-		 * Don't need datasource or connection as this is with 
-		 * Hibernate
-		 */
 
-
+		// Open the session and complete the transaction to the DB
 		Session s = null;
 		Transaction tx = null;
 		try{
@@ -76,9 +87,8 @@ public enum FishStickDaoImpl implements FishStickDao{
 			tx = s.beginTransaction(); // Begin the transaction for the DB
 			s.save(fishStick); // Save the fishStick to the DB
 			tx.commit(); // Commit the transaction
-
 		} catch(Exception e){
-			if (tx!=null) tx.rollback();
+			if (tx!=null) tx.rollback(); //If any errors occurred, rollback the transaction as to not effect the DB
 			throw e;
 		}finally{
 			s.close();
@@ -87,6 +97,10 @@ public enum FishStickDaoImpl implements FishStickDao{
 	}
 
 
+
+	/**
+	 * @author Joel Schmuland and Jordan Mckenzie
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public FishStick findByUUID(String uuid){
@@ -113,6 +127,9 @@ public enum FishStickDaoImpl implements FishStickDao{
 		return fsList.get(0);
 	}
 
+	/**
+	 * @author Joel Schmuland and Jordan Mckenzie
+	 */
 	@Override
 	public void shutdown() {
 		// code here to close the factory, and to destroy the registry

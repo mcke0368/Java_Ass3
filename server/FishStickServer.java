@@ -1,7 +1,7 @@
 /* File FishStickServer.java
  * Author: Todd Kelley
- * Modified By: Stanley Pieda
- * Modifed On: Jan 2018
+ * Modified By: Stanley Pieda, Jordan Mckenzie & Joel Schmuland
+ * Modifed On: April 2018
  * Description: RMI Server startup.
  */
 package server;
@@ -17,7 +17,18 @@ import java.util.Scanner;
  * https://community.oracle.com/thread/1180058?start=0&tstart=0
  */
 
+/**
+ * The Class FishStickServer.
+ * @author Jordan Mckenzie & Joel Schmuland
+ */
 public class FishStickServer {
+    
+    /**
+     * The main method.
+     *@author Joel Schmuland and Jordan Mckenzie
+     * @param args the arguments
+     * 
+     */
     public static void main(String[] args) {
         FishStickServiceImpl fs = null;
         int portNum = 1099;
