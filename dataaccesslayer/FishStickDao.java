@@ -2,7 +2,8 @@
  * Author: Stanley Pieda
  * Date: Jan 2018
  * Description: Sample solution to Assignment 3
- * Modified to remove SQLExceptions from the methods.
+ * Modified By: Jordan Mckenzie & Joel Schmuland
+ * Modifed On: April 2018
  * References:
  * Ram N. (2013).  Data Access Object Design Pattern or DAO Pattern [blog] Retrieved from
  * http://ramj2ee.blogspot.in/2013/08/data-access-object-design-pattern-or.html

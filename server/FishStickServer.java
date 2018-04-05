@@ -1,7 +1,7 @@
 /* File FishStickServer.java
  * Author: Todd Kelley
- * Modified By: Stanley Pieda
- * Modifed On: Jan 2018
+ * Modified By: Stanley Pieda, Jordan Mckenzie & Joel Schmuland
+ * Modifed On: April 2018
  * Description: RMI Server startup.
  */
 package server;
@@ -17,19 +17,30 @@ import java.util.Scanner;
  * https://community.oracle.com/thread/1180058?start=0&tstart=0
  */
 
+/**
+ * The Class FishStickServer.
+ * @author Jordan Mckenzie & Joel Schmuland
+ */
 public class FishStickServer {
+    
+    /**
+     * The main method. 
+     * This method holds all the functionality for the server to set up the RMI service via registry and bind it to a 
+     * specific port / service name
+     *@author Joel Schmuland and Jordan Mckenzie
+     * @param args - Command line arguments. In this iteration of the project, these are not used.
+     * 
+     */
     public static void main(String[] args) {
+    	
         FishStickServiceImpl fs = null;
-        int portNum = 1099;
-        if(args.length > 0){
-                portNum = Integer.parseInt(args[0]);
-        }
+        int portNum = 1099; // Set up the port number for the service to run on
 
         try{
             fs = new FishStickServiceImpl();
-            Registry registry = LocateRegistry.createRegistry(portNum);
+            Registry registry = LocateRegistry.createRegistry(portNum); // Create the registry on the port number (1099)
             System.out.println( "Registry created" );
-            UnicastRemoteObject.exportObject(fs, 0);
+            UnicastRemoteObject.exportObject(fs, 0); // export the FishStickServiceImpl object to the registry
             System.out.println( "Exported" );
             Naming.rebind("//localhost:" + portNum + "/FishStickService", fs);
 

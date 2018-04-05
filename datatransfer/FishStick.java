@@ -4,9 +4,11 @@ package datatransfer;
  * Modified: 
  * Date: Jan 2018
  * Description: Sample solution to Assignment 3
+ * Modified By: Jordan Mckenzie & Joel Schmuland
+ * Modifed On: April 2018
  * Modifications:
- *     ToDo: update with JPA annotations for Hibernate to use
- *     Note: Use Javadoc comments, then annotations, then method header.
+ * 		update with JPA annotations for Hibernate to use
+ * Note: Use Javadoc comments, then annotations, then method header.
  */
 
 import javax.persistence.Column;
@@ -112,7 +114,11 @@ public class FishStick implements Serializable{
 	}
 	
 	
-	/** Getter for uuid */
+	/**
+	 *  Getter for uuid.
+	 *
+	 * @return the uuid
+	 */
 	@Column (length = 55)
 	public String getUUID() {
 		return uuid;
